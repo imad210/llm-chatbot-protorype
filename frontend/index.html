@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analytics Chatbot - OpenDOSM</title>
+    <!-- Link to the external CSS stylesheet -->
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <!-- Status indicator for backend connection -->
+    <div class="status-indicator" id="statusIndicator">🔄 Checking...</div>
+    
+    <!-- Main container for the chatbot interface -->
+    <div class="container">
+        <!-- Left section for chat messages -->
+        <div class="chat-section">
+            <!-- Chat header -->
+            <div class="header">
+                <h1>📊 Data Analytics Chatbot</h1>
+                <p>Tanya saya tentang data demografi Malaysia</p>
+            </div>
+            
+            <!-- Chat messages display area -->
+            <div class="chat-container" id="chatContainer">
+                <!-- Initial bot welcome message -->
+                <div class="message bot-message">
+                    Selamat datang! Saya boleh membantu anda menganalisis data demografi Malaysia. 
+                    Tanya saja seperti "Berapa ramai belia India lelaki di Selangor?" atau 
+                    "Show me data for women in KL with degree education".
+                </div>
+            </div>
+            
+            <!-- Input area for sending messages -->
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    class="input-field" 
+                    id="messageInput" 
+                    placeholder="Tulis pertanyaan anda di sini..."
+                    onkeypress="ChatModule.handleKeyPress(event)" <!-- Calls ChatModule method on key press -->
+                >
+                <button class="send-button" id="sendButton" onclick="ChatModule.sendMessage()">
+                    Hantar <!-- Calls ChatModule method on button click -->
+                </button>
+            </div>
+        </div>
+        
+        <!-- Right section for analysis results -->
+        <div class="results-section">
+            <!-- Results header -->
+            <div class="results-header">
+                <h2>📈 Keputusan Analisis</h2>
+            </div>
+            
+            <!-- Results display area -->
+            <div class="results-content" id="resultsContent">
+                <!-- Initial empty state message for results -->
+                <div class="empty-state">
+                    <p>Keputusan analisis akan dipaparkan di sini selepas anda bertanya.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to the main JavaScript application file, loaded as a module -->
+    <!-- The 'type="module"' attribute enables ES6 module features (import/export) -->
+    <script type="module" src="./app.js"></script>
+</body>
+</html>

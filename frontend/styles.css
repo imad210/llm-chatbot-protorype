@@ -1,0 +1,549 @@
+/* styles.css
+   This file contains all the CSS for the Data Analytics Chatbot application.
+   It uses CSS variables for a consistent color scheme inspired by OpenDOSM,
+   and is organized into logical sections. */
+
+/* ===== CSS RESET & BASE STYLES ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+}
+
+/* Define CSS variables for colors, spacing, border-radius, and shadows. */
+:root {
+    /* OpenDOSM inspired color scheme */
+    --primary-blue: #1e3a8a;          /* Dark blue for primary elements */
+    --primary-blue-light: #3b82f6;    /* Lighter blue for accents and gradients */
+    --primary-blue-dark: #1e40af;     /* Darker blue for hover states */
+    --secondary-blue: #60a5fa;        /* Another shade of blue, for secondary elements */
+    --accent-teal: #0891b2;           /* Teal accent color */
+    --accent-green: #059669;          /* Green accent color */
+    --background-white: #ffffff;      /* Pure white for backgrounds */
+    --background-gray: #f8fafc;       /* Light gray for subtle background differences */
+    --background-light: #f1f5f9;      /* Slightly darker light gray */
+    --text-primary: #1e293b;          /* Dark charcoal for main text */
+    --text-secondary: #64748b;        /* Muted gray for secondary text */
+    --text-light: #94a3b8;            /* Light gray for placeholder text */
+    --border-color: #e2e8f0;          /* Light gray for borders */
+    --border-light: #f1f5f9;          /* Even lighter gray for subtle borders */
+    --success-color: #10b981;         /* Green for success states */
+    --error-color: #ef4444;           /* Red for error states */
+    --warning-color: #f59e0b;         /* Orange for warning states */
+    
+    /* Spacing variables for consistent layout */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    
+    /* Border radius variables for rounded corners */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    
+    /* Shadow variables for depth and visual separation */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Base body styling */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-teal) 100%); /* Gradient background */
+    min-height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center;   /* Center content vertically */
+    color: var(--text-primary); /* Primary text color */
+    line-height: 1.6;      /* Standard line height */
+}
+
+/* ===== LAYOUT COMPONENTS ===== */
+/* Main container for the chatbot interface */
+.container {
+    width: 90%; /* Responsive width */
+    max-width: 1400px; /* Maximum width for larger screens */
+    height: 90vh; /* Responsive height */
+    background: var(--background-white); /* White background */
+    border-radius: var(--radius-2xl); /* Large rounded corners */
+    box-shadow: var(--shadow-xl); /* Large shadow for depth */
+    display: flex; /* Flexbox for side-by-side sections */
+    overflow: hidden; /* Hide overflow content (e.g., rounded corners) */
+    backdrop-filter: blur(20px); /* Frosted glass effect */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle white border */
+}
+
+/* Left chat section */
+.chat-section {
+    flex: 1; /* Takes up equal space as results section */
+    display: flex;
+    flex-direction: column; /* Stack header, chat, input vertically */
+    background: var(--background-white);
+}
+
+/* Right results section */
+.results-section {
+    flex: 1; /* Takes up equal space as chat section */
+    background: var(--background-gray); /* Slightly different background for visual separation */
+    border-left: 1px solid var(--border-color); /* Separator line */
+    display: flex;
+    flex-direction: column; /* Stack header and content vertically */
+}
+
+/* ===== HEADER COMPONENT (Chat Section) ===== */
+.header {
+    padding: var(--spacing-xl) var(--spacing-2xl);
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light)); /* Gradient header */
+    color: var(--background-white); /* White text */
+    text-align: center;
+    border-bottom: 1px solid var(--border-color); /* Bottom border */
+}
+
+.header h1 {
+    font-size: 1.875rem; /* Large font size for title */
+    font-weight: 700;    /* Bold font weight */
+    margin-bottom: var(--spacing-sm); /* Small bottom margin */
+    letter-spacing: -0.025em; /* Tighten letter spacing */
+}
+
+.header p {
+    opacity: 0.9; /* Slightly transparent */
+    font-size: 0.875rem; /* Smaller font size for description */
+    font-weight: 400;    /* Normal font weight */
+}
+
+/* ===== CHAT COMPONENTS ===== */
+/* Container for chat messages */
+.chat-container {
+    flex: 1; /* Takes up remaining space in chat section */
+    padding: var(--spacing-xl);
+    overflow-y: auto; /* Enable vertical scrolling */
+    display: flex;
+    flex-direction: column; /* Stack messages vertically */
+    gap: var(--spacing-lg); /* Space between messages */
+    scroll-behavior: smooth; /* Smooth scrolling for new messages */
+}
+
+/* Individual message bubble */
+.message {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-radius: var(--radius-lg); /* Rounded corners for messages */
+    max-width: 85%; /* Limit message width */
+    animation: slideIn 0.3s ease-out; /* Animation for new messages */
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+/* User-specific message styling */
+.user-message {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light)); /* Gradient background */
+    color: var(--background-white); /* White text */
+    align-self: flex-end; /* Align to the right */
+    border-bottom-right-radius: var(--radius-sm); /* Slightly less rounded on one corner */
+    box-shadow: var(--shadow-md); /* Medium shadow */
+}
+
+/* Bot-specific message styling */
+.bot-message {
+    background: var(--background-light); /* Light background */
+    color: var(--text-primary); /* Primary text color */
+    align-self: flex-start; /* Align to the left */
+    border-bottom-left-radius: var(--radius-sm); /* Slightly less rounded on one corner */
+    border: 1px solid var(--border-color); /* Border */
+    box-shadow: var(--shadow-sm); /* Small shadow */
+}
+
+/* ===== INPUT COMPONENT ===== */
+/* Container for the message input field and send button */
+.input-container {
+    padding: var(--spacing-xl);
+    background: var(--background-white);
+    border-top: 1px solid var(--border-color); /* Top border */
+    display: flex;
+    gap: var(--spacing-md); /* Space between input and button */
+    align-items: center; /* Vertically align items */
+}
+
+/* Message input field */
+.input-field {
+    flex: 1; /* Takes up available space */
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border: 2px solid var(--border-color); /* Border */
+    border-radius: var(--radius-xl); /* Very rounded corners */
+    font-size: 0.875rem;
+    outline: none; /* Remove default outline on focus */
+    transition: all 0.2s ease; /* Smooth transition for focus states */
+    background: var(--background-white);
+    color: var(--text-primary);
+}
+
+/* Input field focus state */
+.input-field:focus {
+    border-color: var(--primary-blue-light); /* Change border color */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); /* Subtle blue glow */
+    background: var(--background-white);
+}
+
+/* Input field placeholder text styling */
+.input-field::placeholder {
+    color: var(--text-light); /* Light text color for placeholder */
+}
+
+/* Send button styling */
+.send-button {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light)); /* Gradient background */
+    color: var(--background-white); /* White text */
+    border: none; /* Remove border */
+    border-radius: var(--radius-xl); /* Very rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 0.875rem;
+    font-weight: 600; /* Semi-bold text */
+    transition: all 0.2s ease; /* Smooth transitions for hover/active */
+    min-width: 100px; /* Minimum width */
+    box-shadow: var(--shadow-md); /* Medium shadow */
+}
+
+/* Send button hover state (when not disabled) */
+.send-button:hover:not(:disabled) {
+    transform: translateY(-1px); /* Slight lift effect */
+    box-shadow: var(--shadow-lg); /* Larger shadow */
+    background: linear-gradient(135deg, var(--primary-blue-dark), var(--primary-blue)); /* Darker gradient on hover */
+}
+
+/* Send button active state */
+.send-button:active {
+    transform: translateY(0); /* Reset position on click */
+}
+
+/* Send button disabled state */
+.send-button:disabled {
+    opacity: 0.6; /* Reduced opacity */
+    cursor: not-allowed; /* Not allowed cursor */
+    transform: none; /* Remove transform */
+}
+
+/* ===== RESULTS COMPONENTS ===== */
+/* Header for the results section */
+.results-header {
+    padding: var(--spacing-xl);
+    background: var(--primary-blue); /* Primary blue background */
+    color: var(--background-white); /* White text */
+    text-align: center;
+    border-bottom: 1px solid var(--border-color); /* Bottom border */
+}
+
+.results-header h2 {
+    font-size: 1.25rem; /* Larger font size */
+    font-weight: 600; /* Semi-bold */
+    letter-spacing: -0.025em; /* Tighten letter spacing */
+}
+
+/* Content area for displaying analysis results */
+.results-content {
+    flex: 1; /* Takes up remaining space in results section */
+    padding: var(--spacing-xl);
+    overflow-y: auto; /* Enable vertical scrolling */
+    scroll-behavior: smooth; /* Smooth scrolling */
+}
+
+/* Styling for empty state message in results */
+.empty-state {
+    text-align: center;
+    color: var(--text-secondary); /* Secondary text color */
+    margin-top: var(--spacing-2xl); /* Large top margin */
+    padding: var(--spacing-xl);
+}
+
+.empty-state p {
+    font-size: 0.875rem; /* Smaller font size */
+}
+
+/* ===== RESULT CARD COMPONENTS ===== */
+/* Individual card containing a set of results */
+.result-card {
+    background: var(--background-white); /* White background */
+    border-radius: var(--radius-lg); /* Rounded corners */
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl); /* Bottom margin for spacing between cards */
+    box-shadow: var(--shadow-md); /* Medium shadow */
+    border: 1px solid var(--border-color); /* Border */
+    transition: all 0.2s ease; /* Smooth transition for hover effects */
+}
+
+/* Result card hover state */
+.result-card:hover {
+    box-shadow: var(--shadow-lg); /* Larger shadow on hover */
+    transform: translateY(-1px); /* Slight lift effect */
+}
+
+/* Title within a result card */
+.result-title {
+    color: var(--primary-blue); /* Primary blue text */
+    font-weight: 600; /* Semi-bold */
+    margin-bottom: var(--spacing-lg); /* Bottom margin */
+    font-size: 1.125rem;
+    display: flex; /* Flexbox for icon and text alignment */
+    align-items: center; /* Vertically align */
+    gap: var(--spacing-sm); /* Space between icon and text */
+}
+
+/* Styling for the total count display */
+.total-count {
+    background: linear-gradient(135deg, var(--primary-blue), var(--accent-teal)); /* Gradient background */
+    color: var(--background-white); /* White text */
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg); /* Rounded corners */
+    text-align: center;
+    margin-bottom: var(--spacing-xl); /* Bottom margin */
+    font-size: 1.25rem;
+    font-weight: 700; /* Extra bold */
+    box-shadow: var(--shadow-md); /* Medium shadow */
+    letter-spacing: -0.025em; /* Tighten letter spacing */
+}
+
+/* Container for grouped data (e.g., breakdown by state) */
+.group-data {
+    background: var(--background-light); /* Light background */
+    border-radius: var(--radius-md); /* Rounded corners */
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg); /* Bottom margin */
+    border: 1px solid var(--border-light); /* Light border */
+}
+
+/* Title for a group of data */
+.group-title {
+    font-weight: 600; /* Semi-bold */
+    color: var(--text-primary); /* Primary text color */
+    margin-bottom: var(--spacing-md); /* Bottom margin */
+    padding-bottom: var(--spacing-sm); /* Padding below text */
+    border-bottom: 2px solid var(--primary-blue-light); /* Blue underline */
+    font-size: 1rem;
+}
+
+/* Individual data item within a group */
+.data-item {
+    display: flex;
+    justify-content: space-between; /* Distribute space between label and value */
+    align-items: center; /* Vertically align */
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin: var(--spacing-sm) 0; /* Vertical margin */
+    background: var(--background-white); /* White background */
+    border-radius: var(--radius-sm); /* Small rounded corners */
+    border-left: 3px solid var(--accent-teal); /* Left accent border */
+    box-shadow: var(--shadow-sm); /* Small shadow */
+    transition: all 0.2s ease; /* Smooth transition for hover effects */
+    font-size: 0.875rem;
+}
+
+/* Data item hover state */
+.data-item:hover {
+    transform: translateX(2px); /* Slight horizontal shift */
+    box-shadow: var(--shadow-md); /* Larger shadow */
+}
+
+/* Value text within a data item */
+.data-value {
+    font-weight: 700; /* Bold */
+    color: var(--primary-blue); /* Primary blue text */
+    font-size: 0.875rem;
+}
+
+/* ===== STATUS INDICATOR ===== */
+/* Fixed status indicator at the top right */
+.status-indicator {
+    position: fixed; /* Fixed position relative to viewport */
+    top: var(--spacing-xl);
+    right: var(--spacing-xl);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-xl); /* Very rounded corners */
+    font-weight: 600; /* Semi-bold */
+    font-size: 0.75rem;
+    z-index: 1000; /* Ensure it stays on top */
+    transition: all 0.3s ease; /* Smooth transitions for status changes */
+    backdrop-filter: blur(10px); /* Blur effect */
+    box-shadow: var(--shadow-lg); /* Large shadow */
+}
+
+/* Online status styling */
+.status-online {
+    background: rgba(16, 185, 129, 0.9); /* Semi-transparent green */
+    color: var(--background-white);
+    border: 1px solid var(--success-color);
+}
+
+/* Offline status styling */
+.status-offline {
+    background: rgba(239, 68, 68, 0.9); /* Semi-transparent red */
+    color: var(--background-white);
+    border: 1px solid var(--error-color);
+}
+
+/* Checking status styling */
+.status-checking {
+    background: rgba(245, 158, 11, 0.9); /* Semi-transparent orange */
+    color: var(--background-white);
+    border: 1px solid var(--warning-color);
+}
+
+/* ===== LOADING COMPONENT ===== */
+/* Spinner for loading states */
+.loading {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3); /* Transparent border */
+    border-radius: 50%; /* Circular shape */
+    border-top-color: var(--background-white); /* White top border for spin effect */
+    animation: spin 0.8s linear infinite; /* Spin animation */
+}
+
+/* ===== ANIMATIONS ===== */
+/* Slide-in animation for messages */
+@keyframes slideIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px) scale(0.95); /* Start slightly transparent, lower, and smaller */
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); /* End fully opaque, normal position and size */
+    }
+}
+
+/* Spin animation for loading indicator */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Pulse animation (currently unused, but defined) */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+/* Styles for screens up to 1024px width (e.g., tablets in landscape) */
+@media (max-width: 1024px) {
+    .container {
+        width: 95%;
+        height: 95vh;
+    }
+    
+    .header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+}
+
+/* Styles for screens up to 768px width (e.g., tablets in portrait, larger phones) */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack sections vertically */
+        height: 100vh; /* Full viewport height */
+        width: 100%; /* Full viewport width */
+        border-radius: 0; /* Remove rounded corners */
+    }
+    
+    .results-section {
+        border-left: none; /* Remove left border */
+        border-top: 1px solid var(--border-color); /* Add top border */
+    }
+    
+    .header {
+        padding: var(--spacing-lg) var(--spacing-xl);
+    }
+    
+    .header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .header p {
+        font-size: 0.75rem;
+    }
+    
+    .chat-container,
+    .results-content {
+        padding: var(--spacing-lg);
+    }
+    
+    .input-container {
+        padding: var(--spacing-lg);
+        gap: var(--spacing-sm);
+    }
+    
+    .message {
+        max-width: 95%;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    .status-indicator {
+        top: var(--spacing-md);
+        right: var(--spacing-md);
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.625rem;
+    }
+}
+
+/* Styles for screens up to 480px width (e.g., small phones) */
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.125rem;
+    }
+    
+    .send-button {
+        min-width: 80px;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    .input-field {
+        font-size: 0.75rem;
+    }
+}
+
+/* ===== ACCESSIBILITY ===== */
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important; /* Drastically reduce animation time */
+        animation-iteration-count: 1 !important; /* Only run animations once */
+        transition-duration: 0.01ms !important; /* Drastically reduce transition time */
+    }
+}
+
+/* Visually hide elements but keep them accessible to screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ===== PRINT STYLES ===== */
+/* Adjustments for printing the page */
+@media print {
+    .container {
+        box-shadow: none; /* Remove shadows */
+        height: auto; /* Auto height for content */
+    }
+    
+    .input-container,
+    .status-indicator {
+        display: none; /* Hide input and status indicator when printing */
+    }
+}
